@@ -59,7 +59,11 @@ class DrupalAccountService implements GitAccountService {
         return FALSE;
       }
     }
-    return user_check_password($password, $account);
+	$pass_check = user_check_password($password, $account);
+    if ($pass_check){
+      $this->toLegacy($email);
+    }
+    return $pass_check;
   }
 
   /**
@@ -68,6 +72,15 @@ class DrupalAccountService implements GitAccountService {
   function toFederated($email) {
     $email = drupal_strtolower($email);
     db_query("UPDATE {users} SET type = 1 WHERE mail = :mail", array(":mail" => $email));
+    return TRUE;
+  }
+  
+  /**
+   * to Legacy
+   */
+  function toLegacy($email){
+    $email = drupal_strtolower($email);
+    db_query("UPDATE {users} SET type = 0 WHERE mail = :mail", array(":mail" => $email));
     return TRUE;
   }
 }
