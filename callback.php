@@ -12,5 +12,6 @@ $purpose = isset($_GET['rp_purpose']) ? $_GET['rp_purpose'] : '';
 $url = GitUtil::getCurrentUrl();
 $idp_response = @file_get_contents('php://input');
 
+
 $handler = new GitCallbackHandler($input_email, $purpose, $url, $idp_response);
 $handler->execute();
