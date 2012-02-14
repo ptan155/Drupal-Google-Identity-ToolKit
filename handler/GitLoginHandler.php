@@ -25,6 +25,7 @@ class GitLoginHandler {
    */
   public function execute() {
     if (empty($this->target)) {
+      watchdog('user', 'Param rp_target can not be empty.', NULL, WATCHDOG_ERROR);
       GitUtil::sendError('Param rp_target can not be empty.');
     }
     else {

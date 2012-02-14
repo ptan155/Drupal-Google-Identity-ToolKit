@@ -4,10 +4,10 @@
  * @file
  * drupal session manage
  */
-
+define('DRUPAL_ROOT', getcwd());
 require_once dirname(__FILE__) . '/session/GitSessionManager.php';
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-require_once DRUPAL_ROOT . '/includes/password.inc';
+// require_once DRUPAL_ROOT . '/includes/password.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
 /**
@@ -18,7 +18,7 @@ class DrupalSessionManager implements GitSessionManager {
    * get session account
    */
   function getSessionAccount() {
-    $account = db_query("SELECT * FROM {users} WHERE uid = :uid", array(':uid' => $_SESSION['customer_id']))->fetchObject();
+    $account = db_fetch_object(db_query("SELECT * FROM {users} WHERE uid = %d", $_SESSION['customer_id']));
 
     if (isset($account->type) && $account->type == 1) {
       $ret = new GitAccount($account->mail, $account->type);

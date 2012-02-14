@@ -3,7 +3,6 @@
  * @file
  * A simple implementation for the SessionManager.
  */
-
 class GitSessionBasedSessionManager implements GitSessionManager {
   private $config;
   private $accountService;

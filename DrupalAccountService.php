@@ -3,12 +3,12 @@
  * @file
  * drupal account service
  */
-
 require_once dirname(__FILE__) . '/data/GitAccountService.php';
 require_once dirname(__FILE__) . '/data/GitAccount.php';
 
+define('DRUPAL_ROOT', getcwd());
 require_once DRUPAL_ROOT . '/includes/bootstrap.inc';
-require_once DRUPAL_ROOT . '/includes/password.inc';
+// require_once DRUPAL_ROOT . '/includes/password.inc';
 drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);
 
 class DrupalAccountService implements GitAccountService {
@@ -20,15 +20,12 @@ class DrupalAccountService implements GitAccountService {
     $ret = NULL;
 
     $cache = NULL;
-    $cache = db_query("SELECT * FROM {users} WHERE mail = :mail", array(':mail' => $email))->fetchObject();
+    $cache = db_fetch_object(db_query("SELECT * FROM {users} WHERE mail = '%s'", $email));
     if (empty($cache->mail)) {
-      $cache = db_query("SELECT * FROM {users} WHERE name = :name", array(':name' => $email))->fetchObject();
+      $cache = db_fetch_object(db_query("SELECT * FROM {users} WHERE name = '%s'", $email));
     }
 
     if (isset($cache->mail)) {
-      if (!GitUtil::isValidEmail($email)){
-        $cache->type = 0;
-      }
       if (isset($cache->type) && $cache->type == 1) {
         $ret = new GitAccount($cache->mail, GitAccount::FEDERATED);
         $ret->setLocalId($cache->uid);
@@ -39,6 +36,7 @@ class DrupalAccountService implements GitAccountService {
         $ret->setLocalId($cache->uid);
         $ret->setDisplayName($cache->name);
       }
+
     }
     else {
       $ret = NULL;
@@ -51,19 +49,23 @@ class DrupalAccountService implements GitAccountService {
    */
   function checkPassword($email, $password) {
     $email = drupal_strtolower($email);
-    $account = db_query("SELECT * FROM {users} WHERE mail = :mail", array(':mail' => $email))->fetchObject();
+    $account = db_fetch_object(db_query("SELECT * FROM {users} WHERE mail = '%s'", $email));
 
     if (empty($account)) {
-      $account = db_query("SELECT * FROM {users} WHERE name = :name", array(':name' => $email))->fetchObject();
+      $account = db_fetch_object(db_query("SELECT * FROM {users} WHERE name = '%s'", $email));
       if (empty($account)) {
         return FALSE;
       }
     }
-	$pass_check = user_check_password($password, $account);
-    if ($pass_check){
-      $this->toLegacy($email);
+
+    $account = user_load(array('name' => $account->name, 'pass' => trim($password), 'status' => 1));
+    if ($account && !drupal_is_denied('mail', $account->mail) && !empty($password)) {
+      return TRUE;
     }
-    return $pass_check;
+    else {
+      return FALSE;
+    }
+
   }
 
   /**
@@ -71,16 +73,7 @@ class DrupalAccountService implements GitAccountService {
    */
   function toFederated($email) {
     $email = drupal_strtolower($email);
-    db_query("UPDATE {users} SET type = 1 WHERE mail = :mail", array(":mail" => $email));
-    return TRUE;
-  }
-  
-  /**
-   * to Legacy
-   */
-  function toLegacy($email){
-    $email = drupal_strtolower($email);
-    db_query("UPDATE {users} SET type = 0 WHERE mail = :mail", array(":mail" => $email));
+    db_query("UPDATE {users} SET type = 1 WHERE mail = '%s'", $email);
     return TRUE;
   }
 }

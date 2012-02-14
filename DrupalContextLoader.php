@@ -4,7 +4,6 @@
  * @file
  * drupal context loader
  */
-
 require_once dirname(__FILE__) . '/handler/GitLoginHandler.php';
 require_once dirname(__FILE__) . '/util/GitConfig.php';
 require_once dirname(__FILE__) . '/util/GitApiClient.php';

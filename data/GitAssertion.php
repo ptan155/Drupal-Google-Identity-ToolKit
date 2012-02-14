@@ -131,14 +131,13 @@ class GitAssertion {
    */
   public function __toString() {
     $obj = array(
-      'verifiedEmail' => $this->verifiedEmail,
-      'firstName' => $this->firstName,
-      'lastName' => $this->lastName,
-      'fullName' => $this->fullName,
-      'nickName' => $this->nickName,
-      'identifier' => $this->identifier,
-      'photoUrl' => $this->photoUrl);
-
+                 'verifiedEmail' => $this->verifiedEmail,
+                 'firstName' => $this->firstName,
+                 'lastName' => $this->lastName,
+                 'fullName' => $this->fullName,
+                 'nickName' => $this->nickName,
+                 'identifier' => $this->identifier,
+                 'photoUrl' => $this->photoUrl);
     return json_encode($obj);
   }
 

@@ -3,7 +3,6 @@
  * @file
  * The relying party account data model.
  */
-
 class GitAccount {
   const FEDERATED = 'FEDERATED';
   const LEGACY = 'LEGACY';

@@ -3,7 +3,6 @@
  * @file
  * include lib php
  */
-
 require_once dirname(__FILE__) . '/handler/GitLoginHandler.php';
 require_once dirname(__FILE__) . '/handler/GitCallbackHandler.php';
 require_once dirname(__FILE__) . '/util/GitConfig.php';

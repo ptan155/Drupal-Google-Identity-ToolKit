@@ -5,7 +5,6 @@
  * may save session data in server side (in
  * memory or persistent storage) or in the client side (cookie).
  */
-
 interface GitSessionManager {
 
   /**

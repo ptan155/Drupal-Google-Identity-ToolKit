@@ -3,7 +3,6 @@
  * @file
  * config google identity toolkit config
  */
-
 $_google_identity_toolkit_config = array(
   'apiKey' => variable_get('google_identity_toolkit_apikey', ''),
   'homeUrl' => '',
@@ -13,5 +12,5 @@ $_google_identity_toolkit_config = array(
   'sessionManager' => 'DrupalSessionManager',
   'customer_id' => 'customer_id',
   'idpAssertionKey' => 'idpAssertion',
-  'pluginName' => 'D7',
+  'pluginName' => 'D6',
 );

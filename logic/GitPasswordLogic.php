@@ -13,55 +13,55 @@ class GitPasswordLogic {
    * construct
    */
   public function __construct($action) {
-    $this->action = $action;
+    $this -> action = $action;
   }
 
   /**
    * run
    */
   public function run($request, $response) {
-    $email = $request->getEmail();
-    $password = $request->getPassword();
+    $email = $request -> getEmail();
+    $password = $request -> getPassword();
 
     if (empty($email)) {
-      $this->action->sendEmailNotExist($request, $response);
+      $this -> action -> sendEmailNotExist($request, $response);
     }
 
-    $account = GitContext::getAccountService()->getAccountByEmail($email);
+    $account = GitContext::getAccountService() -> getAccountByEmail($email);
 
     if (empty($account)) {
-      $this->action->sendEmailNotExist($request, $response);
+      $this -> action -> sendEmailNotExist($request, $response);
     }
     else {
-      $email = $account->getEmail();
+      $email = $account -> getEmail();
       $request = new GitLoginRequest($email, $password);
-      $request->setAccount($account);
+      $request -> setAccount($account);
 
-      if (GitUtil::isValidEmail()) {
-        if ($account->getAccountType() == GitAccount::FEDERATED) {
-          $this->action->sendFederated($request, $response);
+      if (GitUtil::isValidEmail($email)) {
+        if ($account -> getAccountType() == GitAccount::FEDERATED) {
+          $this -> action -> sendFederated($request, $response);
         }
         else {
-          if (GitContext::getAccountService()->checkPassword($email, $password)) {
-            $this->action->login($request, $response);
-            $this->action->sendOk($request, $response);
+          if (GitContext::getAccountService() -> checkPassword($email, $password)) {
+            $this -> action -> login($request, $response);
+            $this -> action -> sendOk($request, $response);
           }
           else {
-            $this->action->sendPasswordError($request, $response);
+            $this -> action -> sendPasswordError($request, $response);
           }
         }
       }
       else {
-        if ($account->getAccountType() == GitAccount::FEDERATED) {
-          $this->action->sendPasswordError($request, $response);
+        if ($account -> getAccountType() == GitAccount::FEDERATED) {
+          $this -> action -> sendPasswordError($request, $response);
         }
         else {
-          if (GitContext::getAccountService()->checkPassword($email, $password)) {
-            $this->action->login($request, $response);
-            $this->action->sendOk($request, $response);
+          if (GitContext::getAccountService() -> checkPassword($email, $password)) {
+            $this -> action -> login($request, $response);
+            $this -> action -> sendOk($request, $response);
           }
           else {
-            $this->action->sendPasswordError($request, $response);
+            $this -> action -> sendPasswordError($request, $response);
           }
         }
       }

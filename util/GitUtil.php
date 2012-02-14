@@ -3,7 +3,6 @@
  * @file
  * git util
  */
-
 require_once dirname(__FILE__) . '/GitContext.php';
 
 class GitUtil {

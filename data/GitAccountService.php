@@ -4,7 +4,6 @@
  * The account related operations that the relying party
  * site needs to implement.
  */
-
 interface GitAccountService {
 
   /**
